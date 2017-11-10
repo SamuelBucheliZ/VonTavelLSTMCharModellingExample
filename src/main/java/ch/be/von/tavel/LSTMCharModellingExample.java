@@ -21,10 +21,11 @@ public class LSTMCharModellingExample {
 
     public static void main(String[] args) throws Exception {
         String textSource = LSTMCharModellingExample.class.getClassLoader().getResource("von_tavel.txt").getFile();
+        String modelSource = LSTMCharModellingExample.class.getClassLoader().getResource("model.zip").getFile();
         Configuration config = Configuration.builder()
                 .setTextSource(textSource)
+                .setModelFileInPath(modelSource)
                 .setValidCharacters(null)
-                .setNumEpochs(4)
                 .build();
         LSTMCharModellingExample lstmCharModellingExample = new LSTMCharModellingExample(config);
         lstmCharModellingExample.run();
@@ -38,8 +39,13 @@ public class LSTMCharModellingExample {
         CharacterIterator iter = fileLoader.getIterator(config.getTextSource());
         int numberOfOutputs = iter.totalOutcomes();
 
-        //Set up network configuration:
-        LSTMNetwork net = LSTMNetwork.create(iter.inputColumns(), config.getLstmLayerSize(), numberOfOutputs, config.getTbpttLength(), config.getRandomSeed());
+        //Restore or set up network configuration:
+        LSTMNetwork net;
+        if (config.getModelFileInPath() == null) {
+            net = LSTMNetwork.create(iter.inputColumns(), config.getLstmLayerSize(), numberOfOutputs, config.getTbpttLength(), config.getRandomSeed());
+        } else {
+            net = LSTMNetwork.restore(config.getModelFileInPath());
+        }
 
         //Print the  number of parameters in the network (and for each layer)
         Layer[] layers = net.getLayers();
@@ -56,35 +62,42 @@ public class LSTMCharModellingExample {
         LOG.info("\n\nExample complete");
 
         net.save(config.getModelFileOutPath());
+
+        LOG.info("--------------------");
+        LOG.info("Final Sample");
+
+        logSample(iter, net);
     }
 
     private void train(CharacterIterator iter, LSTMNetwork net) throws IOException {
         //Do training, and then generate and print samples from network
         int miniBatchNumber = 0;
         for (int i = 0; i < config.getNumEpochs(); i++) {
-            while (iter.hasNext()) {
-                DataSet ds = iter.next();
+            for (DataSet ds : iter.toIterable()) {
                 net.fit(ds);
 
                 if (++miniBatchNumber % config.getGenerateSamplesEveryNMinibatches() == 0) {
-                    logSample(iter, net, miniBatchNumber);
+                    logSampleForBatch(iter, net, miniBatchNumber);
                 }
             }
-
             iter.reset();    //Reset iterator for another epoch
         }
 
     }
 
-    private void logSample(CharacterIterator iter, LSTMNetwork net, int miniBatchNumber) {
+    private void logSampleForBatch(CharacterIterator iter, LSTMNetwork net, int miniBatchNumber) {
         LOG.info("--------------------");
         LOG.info("Completed {} minibatches of size {}x{} characters", miniBatchNumber, config.getMiniBatchSize(), config.getExampleLength());
+        logSample(iter, net);
+    }
+
+    private void logSample(CharacterIterator iter, LSTMNetwork net) {
         LOG.info("Sampling characters from network given initialization \"{}\"", config.getGenerationInitialization() == null ? "" : config.getGenerationInitialization());
         String[] samples = sampler.sampleCharactersFromNetwork(config.getGenerationInitialization(), net, iter);
         for (int j = 0; j < samples.length; j++) {
             LOG.info("----- Sample {} -----", j);
             LOG.info(samples[j]);
-            LOG.info("");
+            LOG.info("-----");
         }
     }
 

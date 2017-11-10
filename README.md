@@ -57,7 +57,9 @@ Some sample output after not too many iterations more
 [...]
 ```
 
-See https://gist.github.com/SamuelBucheliZ/815fbb7ef8e84e47709ab78505fabec4 for the full log.
+See https://gist.github.com/SamuelBucheliZ/815fbb7ef8e84e47709ab78505fabec4 for the full log. Some more examples:
+- https://gist.github.com/SamuelBucheliZ/c19d7b5afcdd838559a6edddd90814f6
+- https://gist.github.com/SamuelBucheliZ/91b40da96ace99a09c2c358b14cd464a
 
 Some useful links about RNNs and LSTM:
 - [A Critical Review of Recurrent Neural Networks for Sequence Learning](https://arxiv.org/abs/1506.00019) by  Zachary C. Lipton, John Berkowitz, Charles Elkan

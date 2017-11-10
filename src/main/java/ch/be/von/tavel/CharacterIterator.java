@@ -203,6 +203,10 @@ public class CharacterIterator implements DataSetIterator {
         throw new UnsupportedOperationException("Not implemented");
     }
 
+    public Iterable<DataSet> toIterable() {
+        return () -> this;
+    }
+
     @Override
     public DataSetPreProcessor getPreProcessor() {
         throw new UnsupportedOperationException("Not implemented");

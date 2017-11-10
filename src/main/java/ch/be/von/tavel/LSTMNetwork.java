@@ -29,6 +29,7 @@ public class LSTMNetwork {
 
     private LSTMNetwork(MultiLayerNetwork net) {
         this.net = net;
+        this.net.setListeners(new ScoreIterationListener(1));
     }
 
     public static LSTMNetwork create(int numberOfInputColumns, int lstmLayerSize, int numberOfOutputs, int tbpttLength, int randomSeed) {
@@ -54,7 +55,6 @@ public class LSTMNetwork {
 
         MultiLayerNetwork net = new MultiLayerNetwork(conf);
         net.init();
-        net.setListeners(new ScoreIterationListener(1));
         return new LSTMNetwork(net);
     }
 

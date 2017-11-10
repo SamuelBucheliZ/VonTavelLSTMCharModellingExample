@@ -15,6 +15,7 @@ public class Configuration {
     private final String textSource;
     private final char[] validCharacters;
     private final String modelFileOutPath;
+    private final String modelFileInPath;
 
 
     /**
@@ -31,6 +32,7 @@ public class Configuration {
      * @param textSource
      * @param validCharacters                  Which characters are allowed? Others will be removed. If null, all characters are allowed.
      * @param modelFileOutPath                 Where to save the model file to
+     * @param modelFileInPath                  Where to load the model file from (to continue training)
      */
     private Configuration(
             int lstmLayerSize,
@@ -45,7 +47,8 @@ public class Configuration {
             int randomSeed,
             String textSource,
             char[] validCharacters,
-            String modelFileOutPath
+            String modelFileOutPath,
+            String modelFileInPath
     ) {
         this.lstmLayerSize = lstmLayerSize;
         this.miniBatchSize = miniBatchSize;
@@ -60,6 +63,7 @@ public class Configuration {
         this.textSource = textSource;
         this.validCharacters = validCharacters;
         this.modelFileOutPath = modelFileOutPath;
+        this.modelFileInPath = modelFileInPath;
     }
 
     public int getLstmLayerSize() {
@@ -114,6 +118,10 @@ public class Configuration {
         return modelFileOutPath;
     }
 
+    public String getModelFileInPath() {
+        return modelFileInPath;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -135,7 +143,7 @@ public class Configuration {
         private String textSource = "https://s3.amazonaws.com/dl4j-distribution/pg100.txt";
         private char[] validCharacters = CharacterSets.getMinimalCharacterSet(); //Which characters are allowed? Others will be removed
         private String modelFileOutPath = "model.zip";
-
+        private String modelFileInPath = null;
 
         public Builder setLstmLayerSize(int lstmLayerSize) {
             this.lstmLayerSize = lstmLayerSize;
@@ -202,6 +210,11 @@ public class Configuration {
             return this;
         }
 
+        public Builder setModelFileInPath(String modelFileInPath) {
+            this.modelFileInPath = modelFileInPath;
+            return this;
+        }
+
         public Configuration build() {
             return new Configuration(
                     lstmLayerSize,
@@ -216,7 +229,8 @@ public class Configuration {
                     randomSeed,
                     textSource,
                     validCharacters,
-                    modelFileOutPath);
+                    modelFileOutPath,
+                    modelFileInPath);
         }
     }
 }
