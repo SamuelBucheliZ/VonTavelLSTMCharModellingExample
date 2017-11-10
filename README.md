@@ -7,7 +7,7 @@ Long Short-Term Memory by looking at the [Rudolf von Tavel](https://en.wikipedia
 from http://gutenberg.spiegel.de/autor/rudolf-von-tavel-995
 
 
-Some smaple output after the first few iterations
+Some sample output after the first few iterations
 ```
 [...]
 17:29:34.435 [main] INFO org.deeplearning4j.optimize.listeners.ScoreIterationListener - Score at iteration 2598 is 66.54929165958953
@@ -56,6 +56,8 @@ Some sample output after not too many iterations more
 19:47:58.787 [main] INFO org.deeplearning4j.optimize.listeners.ScoreIterationListener - Score at iteration 9601 is 64.34566548607292
 [...]
 ```
+
+See https://gist.github.com/SamuelBucheliZ/815fbb7ef8e84e47709ab78505fabec4 for the full log.
 
 Some useful links about RNNs and LSTM:
 - [A Critical Review of Recurrent Neural Networks for Sequence Learning](https://arxiv.org/abs/1506.00019) by  Zachary C. Lipton, John Berkowitz, Charles Elkan
