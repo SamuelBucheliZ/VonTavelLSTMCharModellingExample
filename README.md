@@ -58,5 +58,5 @@ Some sample output after not too many iterations more
 ```
 
 Some useful links about RNNs and LSTM:
-- [https://arxiv.org/abs/1506.00019]( A Critical Review of Recurrent Neural Networks for Sequence Learning) by  Zachary C. Lipton, John Berkowitz, Charles Elkan
+- [https://arxiv.org/abs/1506.00019](A Critical Review of Recurrent Neural Networks for Sequence Learning) by  Zachary C. Lipton, John Berkowitz, Charles Elkan
 - [http://karpathy.github.io/2015/05/21/rnn-effectiveness/](The Unreasonable Effectiveness of Recurrent Neural Networks) by Andrej Karpathy
