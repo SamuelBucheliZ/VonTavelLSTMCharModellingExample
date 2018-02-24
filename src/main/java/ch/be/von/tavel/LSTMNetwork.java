@@ -10,7 +10,7 @@ import org.deeplearning4j.nn.conf.layers.GravesLSTM;
 import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.optimize.api.IterationListener;
 import org.deeplearning4j.util.ModelSerializer;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
@@ -29,7 +29,6 @@ public class LSTMNetwork {
 
     private LSTMNetwork(MultiLayerNetwork net) {
         this.net = net;
-        this.net.setListeners(new ScoreIterationListener(1));
     }
 
     public static LSTMNetwork create(int numberOfInputColumns, int lstmLayerSize, int numberOfOutputs, int tbpttLength, int randomSeed) {
@@ -67,6 +66,10 @@ public class LSTMNetwork {
     public void save(String path) throws IOException {
         LOG.info("Saving model to {}", path);
         ModelSerializer.writeModel(net, path, true);
+    }
+
+    public void setListeners(IterationListener... listeners) {
+        this.net.setListeners(listeners);
     }
 
     public void fit(DataSet data) {

@@ -1,6 +1,11 @@
 package ch.be.von.tavel;
 
+import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.nn.api.Layer;
+import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
+import org.deeplearning4j.ui.api.UIServer;
+import org.deeplearning4j.ui.stats.StatsListener;
+import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.nd4j.linalg.dataset.DataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +52,12 @@ public class LSTMCharModellingExample {
             net = LSTMNetwork.restore(config.getModelFileInPath());
         }
 
+        // for some nice UI and output, see http://localhost:9000/train
+        UIServer uiServer = UIServer.getInstance();
+        StatsStorage statsStorage = new InMemoryStatsStorage();
+        uiServer.attach(statsStorage);
+        net.setListeners(new StatsListener(statsStorage), new ScoreIterationListener(1));
+
         //Print the  number of parameters in the network (and for each layer)
         Layer[] layers = net.getLayers();
         int totalNumParams = 0;
@@ -69,7 +80,7 @@ public class LSTMCharModellingExample {
         logSample(iter, net);
     }
 
-    private void train(CharacterIterator iter, LSTMNetwork net) throws IOException {
+    private void train(CharacterIterator iter, LSTMNetwork net) {
         //Do training, and then generate and print samples from network
         int miniBatchNumber = 0;
         for (int i = 0; i < config.getNumEpochs(); i++) {
